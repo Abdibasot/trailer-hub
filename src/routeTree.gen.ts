@@ -13,6 +13,9 @@ import { Route as DashboardRouteImport } from './routes/dashboard'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as DashboardIndexRouteImport } from './routes/dashboard.index'
 import { Route as DashboardTrailerBuildingRouteImport } from './routes/dashboard.trailer-building'
+import { Route as DashboardReportsRouteImport } from './routes/dashboard.reports'
+import { Route as DashboardRepairRouteImport } from './routes/dashboard.repair'
+import { Route as DashboardParkingRouteImport } from './routes/dashboard.parking'
 
 const DashboardRoute = DashboardRouteImport.update({
   id: '/dashboard',
@@ -35,15 +38,36 @@ const DashboardTrailerBuildingRoute =
     path: '/trailer-building',
     getParentRoute: () => DashboardRoute,
   } as any)
+const DashboardReportsRoute = DashboardReportsRouteImport.update({
+  id: '/reports',
+  path: '/reports',
+  getParentRoute: () => DashboardRoute,
+} as any)
+const DashboardRepairRoute = DashboardRepairRouteImport.update({
+  id: '/repair',
+  path: '/repair',
+  getParentRoute: () => DashboardRoute,
+} as any)
+const DashboardParkingRoute = DashboardParkingRouteImport.update({
+  id: '/parking',
+  path: '/parking',
+  getParentRoute: () => DashboardRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/dashboard': typeof DashboardRouteWithChildren
+  '/dashboard/parking': typeof DashboardParkingRoute
+  '/dashboard/repair': typeof DashboardRepairRoute
+  '/dashboard/reports': typeof DashboardReportsRoute
   '/dashboard/trailer-building': typeof DashboardTrailerBuildingRoute
   '/dashboard/': typeof DashboardIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/dashboard/parking': typeof DashboardParkingRoute
+  '/dashboard/repair': typeof DashboardRepairRoute
+  '/dashboard/reports': typeof DashboardReportsRoute
   '/dashboard/trailer-building': typeof DashboardTrailerBuildingRoute
   '/dashboard': typeof DashboardIndexRoute
 }
@@ -51,18 +75,37 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/dashboard': typeof DashboardRouteWithChildren
+  '/dashboard/parking': typeof DashboardParkingRoute
+  '/dashboard/repair': typeof DashboardRepairRoute
+  '/dashboard/reports': typeof DashboardReportsRoute
   '/dashboard/trailer-building': typeof DashboardTrailerBuildingRoute
   '/dashboard/': typeof DashboardIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/dashboard' | '/dashboard/trailer-building' | '/dashboard/'
+  fullPaths:
+    | '/'
+    | '/dashboard'
+    | '/dashboard/parking'
+    | '/dashboard/repair'
+    | '/dashboard/reports'
+    | '/dashboard/trailer-building'
+    | '/dashboard/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/dashboard/trailer-building' | '/dashboard'
+  to:
+    | '/'
+    | '/dashboard/parking'
+    | '/dashboard/repair'
+    | '/dashboard/reports'
+    | '/dashboard/trailer-building'
+    | '/dashboard'
   id:
     | '__root__'
     | '/'
     | '/dashboard'
+    | '/dashboard/parking'
+    | '/dashboard/repair'
+    | '/dashboard/reports'
     | '/dashboard/trailer-building'
     | '/dashboard/'
   fileRoutesById: FileRoutesById
@@ -102,15 +145,42 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DashboardTrailerBuildingRouteImport
       parentRoute: typeof DashboardRoute
     }
+    '/dashboard/reports': {
+      id: '/dashboard/reports'
+      path: '/reports'
+      fullPath: '/dashboard/reports'
+      preLoaderRoute: typeof DashboardReportsRouteImport
+      parentRoute: typeof DashboardRoute
+    }
+    '/dashboard/repair': {
+      id: '/dashboard/repair'
+      path: '/repair'
+      fullPath: '/dashboard/repair'
+      preLoaderRoute: typeof DashboardRepairRouteImport
+      parentRoute: typeof DashboardRoute
+    }
+    '/dashboard/parking': {
+      id: '/dashboard/parking'
+      path: '/parking'
+      fullPath: '/dashboard/parking'
+      preLoaderRoute: typeof DashboardParkingRouteImport
+      parentRoute: typeof DashboardRoute
+    }
   }
 }
 
 interface DashboardRouteChildren {
+  DashboardParkingRoute: typeof DashboardParkingRoute
+  DashboardRepairRoute: typeof DashboardRepairRoute
+  DashboardReportsRoute: typeof DashboardReportsRoute
   DashboardTrailerBuildingRoute: typeof DashboardTrailerBuildingRoute
   DashboardIndexRoute: typeof DashboardIndexRoute
 }
 
 const DashboardRouteChildren: DashboardRouteChildren = {
+  DashboardParkingRoute: DashboardParkingRoute,
+  DashboardRepairRoute: DashboardRepairRoute,
+  DashboardReportsRoute: DashboardReportsRoute,
   DashboardTrailerBuildingRoute: DashboardTrailerBuildingRoute,
   DashboardIndexRoute: DashboardIndexRoute,
 }
@@ -126,13 +196,3 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}
