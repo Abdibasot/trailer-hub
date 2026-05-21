@@ -14,15 +14,18 @@ import {
   SidebarTrigger,
   SidebarInset,
 } from "@/components/ui/sidebar";
-import { Truck, Wrench, LogOut, Hammer } from "lucide-react";
+import { Truck, Wrench, LogOut, Hammer, LayoutDashboard, Car, FileBarChart2 } from "lucide-react";
 
 export const Route = createFileRoute("/dashboard")({
   component: DashboardLayout,
 });
 
 const items = [
-  { title: "Parking, Repair & Expense", url: "/dashboard", icon: Wrench, exact: true },
+  { title: "Dashboard", url: "/dashboard", icon: LayoutDashboard, exact: true },
+  { title: "Parking", url: "/dashboard/parking", icon: Car, exact: false },
+  { title: "Repair & Expense", url: "/dashboard/repair", icon: Wrench, exact: false },
   { title: "Trailer Building", url: "/dashboard/trailer-building", icon: Hammer, exact: false },
+  { title: "Reports", url: "/dashboard/reports", icon: FileBarChart2, exact: false },
 ];
 
 function DashboardLayout() {
